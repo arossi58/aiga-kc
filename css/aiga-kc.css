@@ -1113,8 +1113,15 @@ h2 {
   }
 }
 
-.drop_down .second .inner ul, .drop_down .second .inner ul li ul, .shopping_cart_dropdown, li.narrow .second .inner ul, .header_top .right #lang_sel ul ul, .drop_down .wide .second ul li.show_widget_area_in_popup .widget, .drop_down .wide.wide_background .second{
-  border-radius: 1rem;
+
+.drop_down .second .inner ul,
+.drop_down .second .inner ul li ul,
+.shopping_cart_dropdown,
+li.narrow .second .inner ul,
+.header_top .right #lang_sel ul ul,
+.drop_down .wide .second ul li.show_widget_area_in_popup .widget,
+.drop_down .wide.wide_background .second{
+  border-radius: 1rem !important;
   background-color: rgba(255, 255, 255, 0.8) !important;
  border-radius: 1rem !important;
  backdrop-filter: blur(4px) !important;
