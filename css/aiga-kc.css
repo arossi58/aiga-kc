@@ -460,7 +460,6 @@ a.tertiary:active {
   border-radius: 0.5rem;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
   padding: 0.75rem;
-
   width: fit-content;
   max-width: 360px;
   gap: 0.5rem;
@@ -471,7 +470,7 @@ a.tertiary:active {
   color: var(--color-textTextInverse);
 }
 
-.
+
 
 /* Responsive tweaks */
 @media (max-width: 1200px) {
