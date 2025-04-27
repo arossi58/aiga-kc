@@ -1120,7 +1120,6 @@ li.narrow .second .inner ul,
 .header_top .right #lang_sel ul ul,
 .drop_down .wide .second ul li.show_widget_area_in_popup .widget,
 .drop_down .wide.wide_background .second {
-  background-color: #ffffff;
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 1rem;
   backdrop-filter: blur(4px);
