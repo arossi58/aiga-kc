@@ -467,8 +467,7 @@ a.tertiary:active {
   margin-left: 1rem;
 }
 
-.aiga-cta p
-h2 {
+.aiga-cta p + h2 {
   color: var(--color-textTextInverse);
 }
 
