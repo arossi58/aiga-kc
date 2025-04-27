@@ -1120,8 +1120,13 @@ li.narrow .second .inner ul,
 .header_top .right #lang_sel ul ul,
 .drop_down .wide .second ul li.show_widget_area_in_popup .widget,
 .drop_down .wide.wide_background .second {
+ 
+  box-shadow: var(--shadow-card-shadow);
+}
+
+
+header.sticky .header_bottom {
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 1rem;
   backdrop-filter: blur(4px);
-  box-shadow: var(--shadow-card-shadow);
 }
