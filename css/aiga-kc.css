@@ -467,10 +467,12 @@ a.tertiary:active {
   margin-left: 1rem;
 }
 
-.aiga-cta p,
+.aiga-cta p
 h2 {
   color: var(--color-textTextInverse);
 }
+
+.
 
 /* Responsive tweaks */
 @media (max-width: 1200px) {
