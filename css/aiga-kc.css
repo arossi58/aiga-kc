@@ -214,18 +214,21 @@ p {
   font-size: var(--typography-fontSizeBody1, 20px);
   font-weight: var(--typography-fontWeightDefault);
   line-height: var(--typography-lineHeightBody1, 28px); /* 140% */
+  padding: 0 !important; /* override wordpress defaults */
 }
 
 .body-2 {
   font-size: var(--typography-fontSizeBody2, 16px);
   font-weight: var(--typography-fontWeightDefault);
   line-height: var(--typography-lineHeightBody2, 20px); /* 125% */
+  padding: 0 !important;
 }
 
 .body-3 {
   font-size: var(--typography-fontSizeBody3, 16px);
   font-weight: var(--typography-fontWeightDefault);
   line-height: var(--typography-lineHeightBody3, 20px); /* 125% */
+  padding: 0 !important; 
 }
 
 .bold {
