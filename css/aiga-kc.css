@@ -320,6 +320,8 @@ a.primary:hover {
 
 a.secondary:hover {
   background-color: var(--color-buttonHoverHoverSecondary);
+  color: var(--color-textTextInverse);
+  text-decoration: none;
 }
 
 a.tertiary:hover {
