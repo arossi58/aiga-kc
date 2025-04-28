@@ -780,7 +780,7 @@ a.tertiary:active {
 
 /* Element: CTA */
 .home-member-preview__cta {
-  background: magenta;
+  background: var(--color-chipChipAmber);
   padding: 20px;
   border-radius: 1rem;
   text-align: center;
