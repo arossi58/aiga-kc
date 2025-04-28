@@ -157,6 +157,7 @@ p {
   font-size: var(--Font-Size-body1, 20px);
   font-weight: 400;
   line-height: var(--typography-lineHeightBody1, 28px); /* 140% */
+  padding: 0;
 }
 h1,
 h2,

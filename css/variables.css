@@ -1,0 +1,91 @@
+:root {
+    /* === surfaces === */
+    --surfaces-sfc-01: #ffffff;
+    --surfaces-sfc-01-alpha80: rgba(255, 255, 255, 0.8);
+    --surfaces-sfc-magenta: rgba(212, 0, 122, 1);
+    --surfaces-sfc-02: #eeeeee;
+    --surfaces-sfc-03: #d4d4d4;
+    /* === button colors === */
+    --color-focusDark: #d4007a;
+    --color-disabledDisbaled01: #464646;
+    --color-disabledDisabled02: #737373;
+    --color-navSelectedNav: #d4007a;
+    --color-navHover: #1f1f1f;
+    
+    --color-navHoverNav: #ffffff;
+    --color-inputBorder: #000000;
+    --color-hoverInputBorder: #d4007a;
+    --color-textTextRequired: #d4007a;
+    --color-linkLink: #d4007a;
+    --color-linkHoverLink: #b80063;
+    --color-linkActiveLink: #98004d;
+    --color-iconIconPrimary: #000000;
+    --color-surfaceSfcBlue: #0693e3;
+    --color-surfaceSfcMagenta: #d4007a;
+    --color-linkLinkInverse: #000000;
+    --color-linkHoverLinkInverse: #0d0d0d;
+    --color-linkActiveLinkInverse: #1f1f1f;
+    --color-surfaceSfc01Alpha80: #ffffffcc;
+    /* === text colors === */
+    --color-textTextPrimary: #000000;
+    --color-textTextInverse: #ffffff;
+    --color-textTextTertiary: #d4007a;
+    --color-textTextSecondary: #464646;
+    --color-textTextPlaceholder: #5c5c5c;
+    --color-textTextError: #d31a31;
+    /* === button colors === */
+    --color-button-primary: #d4007a;
+    --color-buttonButtonSecondary: #000000;
+    --color-buttonButtonTertiary: #d4007a;
+    /* === button hover === */
+    --color-buttonHoverHoverPrimary: #b80063;
+    --color-buttonHoverHoverSecondary: #1f1f1f;
+    --color-buttonHoverHoverTertiary: #d4007a;
+    /* === button active === */
+    --color-buttonActiveActivePrimary: #98004d;
+    --color-buttonActiveActiveSecondary: #323232;
+    --color-buttonActiveActiveTertiary: #b80063;
+    /* === chips === */
+    --color-chip-magenta: #b80063;
+    --color-chip-blue: #0060ac;
+    --color-chip-amber: #fcb900;
+    /* === focus === */
+    --color-focus: #000000;
+    /* === typography === */
+    --typography-fontSizeH1: 60px;
+    --typography-fontSizeH2: 50px;
+    --typography-fontSizeH3: 40px;
+    --typography-fontSizeH4: 34px;
+    --typography-fontSizeH5: 28px;
+    --typography-fontSizeH6: 24px;
+    --typography-fontSizeBody1: 20px;
+    --typography-fontSizeBody2: 16px;
+    --typography-fontSizeBody3: 14px;
+  
+    --typography-lineHeightH1: 72px;
+    --typography-lineHeightH2: 60px;
+    --typography-lineHeightH3: 48px;
+    --typography-lineHeightH4: 40px;
+    --typography-lineHeightH5: 34px;
+    --typography-lineHeightH6: 28px;
+    --typography-lineHeightBody1: 28px;
+    --typography-lineHeightBody2: 20px;
+    --typography-lineHeightBody3: 16px;
+  
+    --typography-fontWeightDefault: 400;
+    --typography-fontWeightHeavy: 700;
+    --typography-fontFamilyFontPrimary: "Arimo";
+  
+    /* === surfaces === */
+    --shadow-card-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.25);
+    --surfaces-sfc-01: #ffffff;
+  }
+  
+  @media (max-width: 768px) {
+    :root {
+      --typography-fontSizeH2: 34px !important;
+      --typography-lineHeightH2: 40px !important;
+      --typography-fontSizeH3: 28px !important;
+      --typography-lineHeightH3: 34px !important;
+    }
+  }
