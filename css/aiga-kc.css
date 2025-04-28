@@ -782,7 +782,7 @@ a.tertiary:active {
 
 /* Element: CTA */
 .home-member-preview__cta {
-  background-color: #fcb900;
+  background-color: #fcb900 !important;
   padding: 20px;
   border-radius: 1rem;
   text-align: center;
