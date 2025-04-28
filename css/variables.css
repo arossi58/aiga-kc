@@ -16,12 +16,8 @@
     --color-inputBorder: #000000;
     --color-hoverInputBorder: #d4007a;
     --color-textTextRequired: #d4007a;
-    --color-linkLink: #d4007a;
-    --color-linkHoverLink: #b80063;
-    --color-linkActiveLink: #98004d;
+   
     --color-iconIconPrimary: #000000;
-    --color-surfaceSfcBlue: #0693e3;
-    --color-surfaceSfcMagenta: #d4007a;
     --color-linkLinkInverse: #000000;
     --color-linkHoverLinkInverse: #0d0d0d;
     --color-linkActiveLinkInverse: #1f1f1f;
@@ -49,6 +45,10 @@
     --color-chip-magenta: #b80063;
     --color-chip-blue: #0060ac;
     --color-chip-amber: #fcb900;
+    /* === link === */
+    --color-linkLink: #d4007a;
+    --color-linkHoverLink: #b80063;
+    --color-linkActiveLink: #98004d;
     /* === focus === */
     --color-focus: #000000;
     /* === typography === */
