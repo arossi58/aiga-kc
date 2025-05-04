@@ -1126,3 +1126,45 @@ li.narrow .second .inner ul,
  box-shadow: var(--shadow-card-shadow);
 }
   
+
+.main-feature {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.main-feature__img-wrapper {
+  width: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.main-feature__description {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.feature-description__left {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+}
+
+.feature-description__left a {
+  align-self: flex-start;
+}
+
+.feature-description__right {
+  width: 300px;
+  aspect-ratio: 1;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.feature-description__right img {
+  height: 100%;
+  object-fit: cover;
+}
