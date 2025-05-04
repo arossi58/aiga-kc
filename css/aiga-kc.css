@@ -306,6 +306,8 @@ a.tertiary {
 /*button states*/
 a.primary:hover {
   background-color: var(--color-buttonHoverHoverPrimary);
+  color: var(--color-textTextInverse);
+  text-decoration: none;
 }
 
 a.secondary:hover {
@@ -318,7 +320,9 @@ a.tertiary:hover {
   border: 2px solid var(--color-buttonHoverHoverTertiary);
   background-color: var(--color-buttonHoverHoverTertiary);
   color: var(--color-textTextInverse);
+  text-decoration: none;
 }
+
 
 a.primary:active {
   background-color: var(--color-buttonActiveActivePrimary);
