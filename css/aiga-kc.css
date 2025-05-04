@@ -1131,6 +1131,7 @@ li.narrow .second .inner ul,
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  max-width: 800px;
 }
 
 .main-feature__img-wrapper {
