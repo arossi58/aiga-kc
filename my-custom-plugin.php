@@ -2,7 +2,7 @@
 /*
 Plugin Name: AIGA KC Custom Plugin
 Description:  All of our site-specific PHP utilities for AIGA KC.
-Version:     1.0.0
+Version:     1.0.1
 Author:      Andrew Rossi
 */
 
