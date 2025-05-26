@@ -1,3 +1,4 @@
+<?php 
 function contact_section_shortcode( $atts ) {
     $atts = shortcode_atts(
         [ 'id' => '' ],
