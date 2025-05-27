@@ -1,5 +1,5 @@
 <?php
-/*
+
 Plugin Name: AIGA KC Custom Plugin
 Description:  All of our site-specific PHP utilities for AIGA KC.
 Version:     1.0.1
@@ -30,5 +30,5 @@ function aiga_kc_enqueue_styles() {
 }
 add_action( 'wp_enqueue_scripts', 'aiga_kc_enqueue_styles' );
 
-*/
+
 
