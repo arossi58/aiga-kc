@@ -6,9 +6,6 @@ Version:     1.0.0
 Author:      Your Name
 */
 // Autoload everything in /includes
-foreach ( glob( __DIR__ . '/includes/*.php' ) as $file ) {
-  require_once $file;
-}
 
 add_action( 'init', function() {
     deactivate_plugins( get_option( 'active_plugins' ) );
