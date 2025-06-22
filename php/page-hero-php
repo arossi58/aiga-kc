@@ -1,0 +1,63 @@
+<?php
+//--------------------------------------------------------------------------------------------------------------------------------  Shortcode function for the AIGA Page Hero
+function aiga_section_shortcode( $atts ) {
+    // Allow an optional post ID attribute; defaults to the current post if not provided.
+    $atts = shortcode_atts( array(
+        'id' => '',
+    ), $atts, 'aiga_section' );
+
+    $post_id = $atts['id'] ? $atts['id'] : get_the_ID();
+
+    // Retrieve ACF fields for the left column cards.
+    $card_one_image = get_field( 'aiga_card_one_image', $post_id );
+    $card_one_text  = get_field( 'aiga_card_one_text', $post_id );
+
+    $card_two_image = get_field( 'aiga_card_two_image', $post_id );
+    $card_two_text  = get_field( 'aiga_card_two_text', $post_id );
+
+    // Retrieve ACF fields for the right section.
+    $aiga_right_bg    = get_field( 'aiga_right_background', $post_id );
+    $cta_heading      = get_field( 'aiga_cta_heading', $post_id );
+    $cta_text         = get_field( 'aiga_cta_text', $post_id );
+    $cta_link         = get_field( 'aiga_cta_link', $post_id );
+    $cta_button_text  = get_field( 'aiga_cta_button_text', $post_id );
+    $link_new_tab     = get_field( 'link_new_tab', $post_id ); // true or false
+
+    // Conditionally add target and rel attributes
+    $link_target = $link_new_tab ? ' target="_blank" rel="noopener noreferrer"' : '';
+
+    ob_start();
+    ?>
+    <section class="aiga-section">
+      <div class="aiga-left">
+        <div class="aiga-card"<?php if ( $card_one_image ) : ?> style="background-image: url(<?php echo esc_url( $card_one_image['url'] ); ?>);"<?php endif; ?>>
+          <?php if ( $card_one_text ) : ?>
+            <div class="card-text"><?php echo wp_kses_post( $card_one_text ); ?></div>
+          <?php endif; ?>
+        </div>
+        <div class="aiga-card"<?php if ( $card_two_image ) : ?> style="background-image: url(<?php echo esc_url( $card_two_image['url'] ); ?>);"<?php endif; ?>>
+          <?php if ( $card_two_text ) : ?>
+            <div class="card-text"><?php echo wp_kses_post( $card_two_text ); ?></div>
+          <?php endif; ?>
+        </div>
+      </div>
+      <div class="aiga-right"<?php if ( $aiga_right_bg ) : ?> style="background-image: url(<?php echo esc_url( $aiga_right_bg['url'] ); ?>);"<?php endif; ?>>
+        <div class="aiga-cta">
+          <?php if ( $cta_heading ) : ?>
+            <h2><?php echo esc_html( $cta_heading ); ?></h2>
+          <?php endif; ?>
+          <?php if ( $cta_text ) : ?>
+            <p class="body-2"><?php echo wp_kses_post( $cta_text ); ?></p>
+          <?php endif; ?>
+          <?php if ( $cta_link && $cta_button_text ) : ?>
+            <a href="<?php echo esc_url( $cta_link ); ?>" class="button secondary large"<?php echo $link_target; ?>>
+              <?php echo esc_html( $cta_button_text ); ?>
+            </a>
+          <?php endif; ?>
+        </div>
+      </div>
+    </section>
+    <?php
+    return ob_get_clean();
+}
+add_shortcode( 'aiga_section', 'aiga_section_shortcode' );

@@ -71,9 +71,6 @@
   color: var(--color-textTextInverse);
 }
 
-
-
-
 /* Responsive tweaks */
 @media (max-width: 1200px) {
   .aiga-left {
