@@ -1,0 +1,95 @@
+/*------------------------------------------------------------------------------------------ Contact Bento -----*/
+/* Desktop Layout */
+.contact-section {
+  width: 100%;
+  display: flex;
+  gap: 2rem;
+  max-width: 1280px;
+  padding: 3.5rem 2rem;
+  margin: 0 auto;
+}
+
+.contact-form-container {
+  min-width: 300px;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.contact-bento {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  margin: 0 auto;
+  align-items: stretch; /* Ensure left and right columns have equal height */
+}
+
+/* Left Column: 1/3 width */
+.bento__left {
+  flex: 1 1 33.33%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.bento__left .bento__item {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Force square */
+  overflow: hidden;
+  flex: 1;
+}
+.bento__left .bento__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 1rem;
+}
+
+/* Right Column: 2/3 width */
+.bento__right {
+  flex: 1 1 66.67%;
+  position: relative;
+}
+.bento__right .bento__item {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.bento__right .bento__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 1rem;
+}
+
+@media (max-width: 1200px) {
+  .bento__left {
+    display: none;
+  }
+  .contact-form-container {
+    width: 50%;
+  }
+}
+
+/* Mobile Layout: Single Row of 3 Images */
+@media (max-width: 1000px) {
+  .contact-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .contact-form-container {
+    width: 100%;
+    display: flex;
+  }
+  .contact-bento {
+    display: none;
+  }
+  /* Remove left/right column separation on mobile */
+}
+
+@media (max-width: 768px) {
+  .contact-section {
+    padding: 8px;
+  }
+}
