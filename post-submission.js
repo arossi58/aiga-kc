@@ -1,6 +1,6 @@
 /**** 🛠️ CONFIGURATION ****/
-const SLACK_WEBHOOK_URL = '#';        // ← your Slack incoming webhook
-const MASTER_FOLDER_ID  = '#';        // ← your master folder ID
+const SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/REPLACE/ME/PLEASE'; // ← your Slack Incoming Webhook URL
+const MASTER_FOLDER_ID  = 'REPLACE_MASTER_FOLDER_ID';                            // ← your Drive folder ID for campaign subfolders
 
 /**
  * Exact labels from your current form, plus a few sensible variants.
@@ -46,6 +46,16 @@ const FIELD_MAP = {
 /**** 🔎 UTILITIES ****/
 const norm = s => String(s || "").trim().toLowerCase();
 
+/** Lowercase, hyphen-separated slug */
+function slug(s) {
+  return String(s || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 function findLabelKey(responses, variants) {
   const keys = Object.keys(responses || {});
   const want = variants.map(norm);
@@ -77,92 +87,98 @@ function fileUrlsFrom(responses, key) {
   return raw.split(",").map(s => s.trim()).filter(Boolean);
 }
 
-/**** 🚀 MAIN ENTRY ****/
+/**** 🚀 MAIN ENTRY (installable trigger) ****/
 function onFormSubmit(e) {
-  const responses = e?.namedValues || {};
-  const timestamp = e?.values?.[0] || new Date().toISOString();
+  const startedAt = new Date();
+  try {
+    const responses = e?.namedValues || {};
+    const timestamp = e?.values?.[0] || new Date().toISOString();
 
-  Logger.log("Available fields: " + JSON.stringify(Object.keys(responses)));
+    Logger.log("onFormSubmit fired. Keys: " + JSON.stringify(Object.keys(responses)));
 
-  // Resolve actual keys present for each field
-  const kEmail         = findLabelKey(responses, FIELD_MAP.email);
-  const kCampaign      = findLabelKey(responses, FIELD_MAP.campaignName);
-  const kPOC           = findLabelKey(responses, FIELD_MAP.pointOfContact);
-  const kLinks1        = findLabelKey(responses, FIELD_MAP.linksPrimary);
-  const kLinks2        = findLabelKey(responses, FIELD_MAP.linksEventbrite);
-  const kPublish       = findLabelKey(responses, FIELD_MAP.publishDate);
-  const kPlatforms     = findLabelKey(responses, FIELD_MAP.platforms);
-  const kNotes         = findLabelKey(responses, FIELD_MAP.otherNotes);
-  const kImageUploads  = findLabelKey(responses, FIELD_MAP.imageUploads);
+    // Resolve actual keys present for each field
+    const kEmail         = findLabelKey(responses, FIELD_MAP.email);
+    const kCampaign      = findLabelKey(responses, FIELD_MAP.campaignName);
+    const kPOC           = findLabelKey(responses, FIELD_MAP.pointOfContact);
+    const kLinks1        = findLabelKey(responses, FIELD_MAP.linksPrimary);
+    const kLinks2        = findLabelKey(responses, FIELD_MAP.linksEventbrite);
+    const kPublish       = findLabelKey(responses, FIELD_MAP.publishDate);
+    const kPlatforms     = findLabelKey(responses, FIELD_MAP.platforms);
+    const kNotes         = findLabelKey(responses, FIELD_MAP.otherNotes);
+    const kImageUploads  = findLabelKey(responses, FIELD_MAP.imageUploads);
 
-  Logger.log("Detected labels: " + JSON.stringify({
-    email: kEmail, campaignName: kCampaign, pointOfContact: kPOC,
-    linksPrimary: kLinks1, eventbrite: kLinks2,
-    publishDate: kPublish, platforms: kPlatforms,
-    otherNotes: kNotes, imageUploads: kImageUploads
-  }, null, 2));
+    Logger.log("Detected labels: " + JSON.stringify({
+      email: kEmail, campaignName: kCampaign, pointOfContact: kPOC,
+      linksPrimary: kLinks1, eventbrite: kLinks2,
+      publishDate: kPublish, platforms: kPlatforms,
+      otherNotes: kNotes, imageUploads: kImageUploads
+    }, null, 2));
 
-  // Pull normalized values
-  const email          = valueFrom(responses, kEmail, "N/A");
-  const campaignName   = valueFrom(responses, kCampaign, "Missing Campaign Name");
-  const pointOfContact = valueFrom(responses, kPOC, "Missing Contact");
+    // Pull normalized values
+    const email          = valueFrom(responses, kEmail, "N/A");
+    const campaignName   = valueFrom(responses, kCampaign, "Missing Campaign Name");
+    const pointOfContact = valueFrom(responses, kPOC, "Missing Contact");
 
-  const linksPrimary   = valueFrom(responses, kLinks1, "");
-  const eventbrite     = valueFrom(responses, kLinks2, "");
-  const links = [linksPrimary, eventbrite]
-    .map(s => s && s.trim())
-    .filter(Boolean)
-    .join("\n");
+    const linksPrimary   = valueFrom(responses, kLinks1, "");
+    const eventbrite     = valueFrom(responses, kLinks2, "");
+    const links = [linksPrimary, eventbrite].map(s => s && s.trim()).filter(Boolean).join("\n");
 
-  const publishDateStr = valueFrom(responses, kPublish, "Missing Publish Date");
-  const platforms      = valueFrom(responses, kPlatforms, "Missing Platforms");
-  const otherNotes     = valueFrom(responses, kNotes, "None");
+    const publishDateStr = valueFrom(responses, kPublish, "Missing Publish Date");
+    const platforms      = valueFrom(responses, kPlatforms, "Missing Platforms");
+    const otherNotes     = valueFrom(responses, kNotes, "None");
 
-  // Create destination folder
-  const folderUrl = createSubmissionFolder(campaignName, timestamp);
-  const folderId = extractFolderId(folderUrl);
-  const destinationFolder = DriveApp.getFolderById(folderId);
+    // Create destination folder
+    const folderUrl = createSubmissionFolder(campaignName, timestamp);
+    const folderId = extractFolderId(folderUrl);
+    const destinationFolder = DriveApp.getFolderById(folderId);
 
-  // Move & rename uploaded files (if any)
-  if (kImageUploads) {
-    moveAndRenameFiles([kImageUploads], responses, campaignName, destinationFolder);
-  } else {
-    Logger.log("No matching file-upload field found. Add the label to FIELD_MAP.imageUploads if you rename it.");
-  }
+    // Move & rename uploaded files (if any)
+    if (kImageUploads) {
+      moveAndRenameFiles([kImageUploads], responses, campaignName, destinationFolder);
+    } else {
+      Logger.log("No matching file-upload field found. If you renamed it, add the label to FIELD_MAP.imageUploads.");
+    }
 
-  // Create summary doc
-  createSummaryDoc(destinationFolder, campaignName, {
-    email,
-    campaignName,
-    pointOfContact,
-    links,
-    publishDateStr,
-    platforms,
-    otherNotes
-  });
+    // Create summary doc
+    createSummaryDoc(destinationFolder, campaignName, {
+      email, campaignName, pointOfContact, links, publishDateStr, platforms, otherNotes
+    });
 
-  // Send Slack notification
-  sendToSlack({
-    text:
-      `*🆕 New Campaign Submission*\n\n` +
-      `*Campaign:* *${campaignName}*\n` +
-      `👤 *Point of Contact:* ${pointOfContact}\n` +
-      `──────────────\n\n` +
-      `📅 *Publish Date:* ${publishDateStr}\n` +
-      `📣 *Platforms:* ${platforms}\n` +
-      `🔗 *Links:*\n${links || "None"}\n\n` +
-      `🗒 *Notes:* ${otherNotes}\n\n` +
-      `📁 *Assets Folder:* ${folderUrl}\n\n`
-  });
+    // Send Slack notification (success)
+    sendToSlack({
+      text:
+        `*🆕 New Campaign Submission*\n\n` +
+        `*Campaign:* *${campaignName}*\n` +
+        `👤 *Point of Contact:* ${pointOfContact}\n` +
+        `──────────────\n\n` +
+        `📅 *Publish Date:* ${publishDateStr}\n` +
+        `📣 *Platforms:* ${platforms}\n` +
+        `🔗 *Links:*\n${links || "None"}\n\n` +
+        `🗒 *Notes:* ${otherNotes}\n\n` +
+        `📁 *Assets Folder:* ${folderUrl}\n\n` +
+        `_Processed in ${((new Date()) - startedAt)} ms_`
+    });
 
-  // Schedule reminder 1 day before publish date (09:00 in script's timezone)
-  const publishDate = parseFlexibleDate(publishDateStr);
-  if (publishDate) {
-    const reminderDate = new Date(publishDate);
-    reminderDate.setDate(publishDate.getDate() - 1);
-    scheduleReminder(campaignName, publishDateStr, reminderDate);
-  } else {
-    Logger.log(`Could not parse publish date from "${publishDateStr}". Reminder not scheduled.`);
+    // Schedule reminder 1 day before publish date (09:00 local)
+    const publishDate = parseFlexibleDate(publishDateStr);
+    if (publishDate) {
+      const reminderDate = new Date(publishDate);
+      reminderDate.setDate(publishDate.getDate() - 1);
+      scheduleReminder(campaignName, publishDateStr, reminderDate);
+    } else {
+      Logger.log(`Could not parse publish date from "${publishDateStr}". Reminder not scheduled.`);
+    }
+
+  } catch (err) {
+    Logger.log("onFormSubmit error: " + (err && err.stack || err));
+    // Best-effort Slack failure message, so issues aren't silent
+    try {
+      sendToSlack({
+        text: `:warning: *Form submission failed in Apps Script*\n\`\`\`${String(err)}\n${(err && err.stack) || ""}\n\`\`\``
+      });
+    } catch (_) {
+      // If even Slack fails, rely on Executions log
+    }
   }
 }
 
@@ -181,27 +197,46 @@ function extractFolderId(url) {
   return match ? match[0] : null;
 }
 
-/**** 📦 Move uploaded files into the submission folder and rename them ****/
+/**** 📦 Move uploaded files and rename them
+ * New name: <original-file-name>-<campaign-name>-<seq>.<ext> (all lowercase, hyphen-separated)
+ ****/
 function moveAndRenameFiles(uploadFields, responses, campaignName, destinationFolder) {
+  const campaignSlug = slug(campaignName || "untitled");
+
   uploadFields.forEach(fieldKey => {
     const urls = fileUrlsFrom(responses, fieldKey);
+
     urls.forEach((url, index) => {
       try {
         const fileIdMatch = url.match(/[-\w]{25,}/);
         if (!fileIdMatch) throw new Error("No file ID in URL: " + url);
+
         const fileId = fileIdMatch[0];
         const file = DriveApp.getFileById(fileId);
-        const name = file.getName();
-        const ext = name.includes(".") ? name.split(".").pop() : "";
-        const base = "Images and Video"; // use your form’s label for cleaner names
-        const newName = `${base} - ${campaignName} - ${String(index + 1).padStart(2, "0")}${ext ? "." + ext : ""}`;
+
+        // Original name pieces
+        const originalName = file.getName();                // e.g., "My Photo 1.JPG"
+        const dot = originalName.lastIndexOf(".");
+        const base = dot > -1 ? originalName.slice(0, dot) : originalName;
+        const ext  = dot > -1 ? originalName.slice(dot + 1) : "";  // no dot
+
+        // Build new name
+        const seq = String(index + 1).padStart(2, "0");
+        const newName =
+          `${slug(base)}-${campaignSlug}-${seq}` + (ext ? `.${String(ext).toLowerCase()}` : "");
+
+        // Rename + move
         file.setName(newName);
         destinationFolder.addFile(file);
 
+        // Remove from any previous parent folders
         const parents = file.getParents();
         while (parents.hasNext()) {
           file.removeFromFolder(parents.next());
         }
+
+        Logger.log(`Renamed "${originalName}" → "${newName}"`);
+
       } catch (err) {
         Logger.log(`File processing error in field "${fieldKey}": ${err}`);
       }
@@ -237,19 +272,18 @@ function createSummaryDoc(folder, campaignName, data) {
   folder.addFile(file);
 }
 
-/**** 📬 Send Slack message ****/
+/**** 📬 Slack: strict response handling ****/
 function sendToSlack(message) {
-  try {
-    const response = UrlFetchApp.fetch(SLACK_WEBHOOK_URL, {
-      method: 'post',
-      contentType: 'application/json',
-      payload: JSON.stringify(message),
-      muteHttpExceptions: true,
-    });
-    Logger.log("Slack response: " + response.getResponseCode() + " " + response.getContentText());
-  } catch (err) {
-    Logger.log("Slack error: " + err);
-  }
+  const resp = UrlFetchApp.fetch(SLACK_WEBHOOK_URL, {
+    method: 'post',
+    contentType: 'application/json',
+    payload: JSON.stringify(message),
+    muteHttpExceptions: true,
+  });
+  const code = resp.getResponseCode();
+  const text = resp.getContentText();
+  Logger.log("Slack response: " + code + " " + text);
+  if (code !== 200) throw new Error(`Slack error ${code}: ${text}`);
 }
 
 /**** 🗓 Parse flexible date strings safely ****/
@@ -272,7 +306,7 @@ function parseFlexibleDate(s) {
 function scheduleReminder(campaignName, publishDateStr, reminderDate) {
   ScriptApp.newTrigger('sendReminder')
     .timeBased()
-    .at(new Date(reminderDate.getFullYear(), reminderDate.getMonth(), reminderDate.getDate(), 9)) // 9 AM
+    .at(new Date(reminderDate.getFullYear(), reminderDate.getMonth(), reminderDate.getDate(), 9)) // 9 AM local
     .create();
 
   const props = PropertiesService.getScriptProperties();
@@ -292,4 +326,22 @@ function sendReminder() {
   });
 
   props.deleteProperty(todayKey);
+}
+
+/**** ✅ Helpers for setup & testing ****/
+// 1) Run this once to verify Slack + authorize scopes
+function testSlack() {
+  sendToSlack({ text: ":white_check_mark: Webhook test from Apps Script." });
+}
+
+// 2a) If your script is BOUND TO THE FORM, run this ONCE to add the installable trigger
+function installTriggerForForm(formId) {
+  if (!formId) throw new Error("Pass the Form ID (from its URL) to installTriggerForForm(formId).");
+  ScriptApp.newTrigger('onFormSubmit').forForm(formId).onFormSubmit().create();
+}
+
+// 2b) If your script is BOUND TO THE RESPONSE SHEET, run this ONCE to add the installable trigger
+function installTriggerForSpreadsheet(spreadsheetId) {
+  if (!spreadsheetId) throw new Error("Pass the Spreadsheet ID (from its URL) to installTriggerForSpreadsheet(spreadsheetId).");
+  ScriptApp.newTrigger('onFormSubmit').forSpreadsheet(spreadsheetId).onFormSubmit().create();
 }
